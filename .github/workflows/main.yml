@@ -1,0 +1,26 @@
+name: Deploy to Digital Ocean Droplet
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up SSH key
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Copy files to Droplet
+      run: |
+        scp -r . root@${{ secrets.DROPLET_IP }}:/path/to/project
+
+    - name: SSH & Deploy
+      run: |
+        ssh root@${{ secrets.DROPLET_IP }} 'cd /path/to/project && docker-compose up --build -d'

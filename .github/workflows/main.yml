@@ -13,15 +13,14 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Setup SSH environment
-      run: |
-        mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_HOST_KEY }}" >> ~/.ssh/known_hosts
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" | tr -d '\r' | ssh-add -
+    - name: Set up SSH key
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Copy files to Droplet
       run: |
-        scp -r . root@${{ secrets.DROPLET_IP }}:/root/expense-tracker
+        scp -o StrictHostKeyChecking=no -r . root@${{ secrets.DROPLET_IP }}:/root/expense-tracker
 
     - name: SSH & Deploy
       run: |

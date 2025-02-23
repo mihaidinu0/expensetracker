@@ -24,4 +24,12 @@ jobs:
 
     - name: SSH & Deploy
       run: |
-        ssh root@${{ secrets.DROPLET_IP }} 'cd /root/expense-tracker && docker-compose up --build -d'
+        ssh root@${{ secrets.DROPLET_IP }} <<EOF
+        export POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+        export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+        export POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+        export JWT_SECRET=${{ secrets.JWT_SECRET }}
+        export JWT_EXPIRATION_MS=${{ secrets.JWT_EXPIRATION_MS }}
+        cd /root/expense-tracker
+        docker-compose up --build -d
+        EOF

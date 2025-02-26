@@ -15,7 +15,7 @@ RUN ./gradlew build -x test --no-daemon
 FROM openjdk:17-slim
 WORKDIR /app
 
-COPY --from=builder /app/build/libs/*.jar app.jar
+COPY --from=builder /app/build/libs/app.jar ./
 
 RUN useradd -m appuser && chown -R appuser:appuser /app
 USER appuser

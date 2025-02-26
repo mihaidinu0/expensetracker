@@ -5,10 +5,7 @@ plugins {
 }
 
 bootJar {
-    archiveFileName = 'app.jar'
-    layered {
-        enabled = true
-    }
+    archiveFileName = "app.jar"
 }
 
 group = 'com.example'
